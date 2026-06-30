@@ -1,5 +1,7 @@
 package choices
 
+import "math/rand"
+
 type SubCategory struct {
 	Title         string
 	IsMultiChoice bool
@@ -76,7 +78,7 @@ func PortSelection() *SubCategory {
 		Commands: map[string]bool{
 			"-p <port ranges> e.g. 22, 1-65535, U:53,T:21-25":                         true,
 			"-p- all 65535 ports (shorthand for -p1-65535)":                           false,
-			"--exclude-ports<port ranges> ports to exclude":                           true,
+			"--exclude-ports <port ranges> ports to exclude":                          true,
 			"-F fast scan fewer ports than default":                                   false,
 			"-r scan ports sequentially, don't randomize":                             false,
 			"--top-ports <num> scan N most common ports":                              true,
@@ -199,4 +201,20 @@ func Misc() *SubCategory {
 			"--unprivileged assume user lacks raw socket privileges":    false,
 		},
 	}
+}
+
+func RandomErrFace() string {
+	faces := []string{
+		"( ꩜ ᯅ ꩜)⁭ ⁭",
+		"(╥﹏╥)",
+		"(｡•́︿•̀｡)",
+		"՞߹ - ߹՞",
+		"( • ᴖ • ｡)",
+		"૮◞ ‸ ◟ ა",
+		"｡°(°¯᷄◠¯᷅°)°｡",
+		":‹",
+		":(",
+	}
+	face := faces[rand.Intn(len(faces))]
+	return face
 }

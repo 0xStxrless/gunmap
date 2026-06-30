@@ -6,7 +6,9 @@ import (
 	"strings"
 
 	tea "charm.land/bubbletea/v2"
-	"github.com/StxrlessLabs/webber/choices"
+	"charm.land/lipgloss/v2"
+	"github.com/StxrlessLabs/gunmap/choices"
+	"github.com/StxrlessLabs/gunmap/styles"
 )
 
 type PageModel struct {
@@ -61,13 +63,10 @@ func (m *PageModel) ToggleSelected() (needsInput bool) {
 
 	if !m.Page.IsMultiChoice {
 		_, already := m.selected[m.cursor]
-		// always clear first for single-choice
 		m.selected = make(map[int]struct{})
 		if already {
-			// was selected, now deselected — done
 			return false
 		}
-		// select it
 		m.selected[m.cursor] = struct{}{}
 		if takesInput {
 			m.activeFlag = key
@@ -78,14 +77,11 @@ func (m *PageModel) ToggleSelected() (needsInput bool) {
 		return false
 	}
 
-	// multi-choice
 	if _, ok := m.selected[m.cursor]; ok {
-		// deselect
 		delete(m.selected, m.cursor)
 		return false
 	}
 
-	// select
 	m.selected[m.cursor] = struct{}{}
 	if takesInput {
 		m.activeFlag = key
@@ -112,7 +108,6 @@ func (m *PageModel) UpdateInput(msg tea.KeyPressMsg) {
 func (m *PageModel) ConfirmInput() {
 	if m.activeFlag != "" {
 		if m.inputBuf == "" {
-			// Empty input = deselect the flag
 			for i, k := range m.keys {
 				if k == m.activeFlag {
 					delete(m.selected, i)
@@ -128,13 +123,16 @@ func (m *PageModel) ConfirmInput() {
 	m.inputActive = false
 }
 
-// SelectedCommands returns flags ready to be assembled into an nmap command.
-// Flags with values are returned as "flag value", plain flags as "flag".
+func (m *PageModel) SelectedCount() int {
+	return len(m.selected)
+}
+
 func (m *PageModel) SelectedCommands() []string {
 	out := make([]string, 0, len(m.selected))
 	for idx := range m.selected {
-		flag := m.keys[idx]
-		if val, ok := m.inputValues[flag]; ok && val != "" {
+		raw := m.keys[idx]
+		flag, _ := styles.SplitFlagDescription(raw)
+		if val, ok := m.inputValues[raw]; ok && val != "" {
 			out = append(out, flag+" "+val)
 		} else {
 			out = append(out, flag)
@@ -144,39 +142,55 @@ func (m *PageModel) SelectedCommands() []string {
 	return out
 }
 
-func (m *PageModel) View() string {
-	var s strings.Builder
-	s.WriteString(m.Page.Title)
-	s.WriteString("\n")
-	if m.Page.IsMultiChoice {
-		s.WriteString("Pick more than one\n")
-	} else {
-		s.WriteString("Pick one\n")
+func (m *PageModel) flagColWidth() int {
+	width := 0
+	for _, k := range m.keys {
+		flag, _ := styles.SplitFlagDescription(k)
+		if w := lipgloss.Width(flag); w > width {
+			width = w
+		}
 	}
+	return width
+}
+
+func (m *PageModel) View() string {
+	return m.viewWidth(0)
+}
+
+func (m *PageModel) ViewWidth(width int) string {
+	return m.viewWidth(width)
+}
+
+func (m *PageModel) viewWidth(width int) string {
+	var s strings.Builder
+
+	flagColWidth := m.flagColWidth()
 
 	for i, key := range m.keys {
 		takesInput := m.Page.Commands[key]
-		cursor := " "
-		if m.cursor == i {
-			cursor = ">"
-		}
-		checked := " "
-		if _, ok := m.selected[i]; ok {
-			checked = "x"
-		}
-		extra := ""
+		isCursor := m.cursor == i
+		_, isSelected := m.selected[i]
+
+		flag, desc := styles.SplitFlagDescription(key)
+
 		if takesInput {
 			if val, ok := m.inputValues[key]; ok && val != "" {
-				extra = fmt.Sprintf(" = %q", val)
-			} else {
-				extra = " (needs input)"
+				desc = fmt.Sprintf("%s = %s", desc, val)
 			}
 		}
-		fmt.Fprintf(&s, "%s [%s] %s%s\n", cursor, checked, key, extra)
+
+		s.WriteString(styles.RenderOption(flag, desc, isCursor, isSelected, flagColWidth, width))
+		s.WriteString("\n")
 	}
 
 	if m.inputActive {
-		fmt.Fprintf(&s, "\nValue for %s: %s█\n", m.activeFlag, m.inputBuf)
+		flag, _ := styles.SplitFlagDescription(m.activeFlag)
+		prompt := fmt.Sprintf("  %s › %s", flag, m.inputBuf)
+		cursor := lipgloss.NewStyle().Foreground(lipgloss.Color("#00C8E8")).Render("█")
+		s.WriteString("\n")
+		s.WriteString(styles.Accent(prompt))
+		s.WriteString(cursor)
+		s.WriteString("\n")
 	}
 
 	return s.String()
