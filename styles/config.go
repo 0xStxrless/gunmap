@@ -10,9 +10,6 @@ import (
 	"github.com/BurntSushi/toml"
 )
 
-// configColors mirrors the keys in ~/.config/gnmap.conf. Every field is a
-// string hex color (or, for Selected/Cursor, a literal glyph) and is
-// optional — any field left blank in the file keeps the built-in default.
 type configColors struct {
 	BgBase  string `toml:"bgBase"`
 	BgPanel string `toml:"bgPanel"`
@@ -44,12 +41,7 @@ type configColors struct {
 	Cursor   string `toml:"cursor"`
 }
 
-// configPath returns ~/.config/gnmap.conf, or "" if the home dir can't be
-// resolved.
 func configPath() string {
-	// When run via `sudo`, os.UserHomeDir() resolves to /root instead of
-	// the invoking user's home. Prefer SUDO_USER's home in that case so
-	// the config file is found regardless of how the binary is launched.
 	if sudoUser := os.Getenv("SUDO_USER"); sudoUser != "" {
 		if u, err := user.Lookup(sudoUser); err == nil {
 			return filepath.Join(u.HomeDir, ".config", "gunmap.toml")
@@ -63,9 +55,6 @@ func configPath() string {
 	return filepath.Join(home, ".config", "gunmap.toml")
 }
 
-// loadConfig reads the user's config file if present. A missing file is not
-// an error — it just means "use defaults" — but a malformed file is
-// reported so the user can fix it.
 func loadConfig() (configColors, error) {
 	var cfg configColors
 
@@ -84,8 +73,6 @@ func loadConfig() (configColors, error) {
 	return cfg, nil
 }
 
-// applyOverrides replaces any non-empty field in cfg onto the package-level
-// color/glyph vars, leaving the hardcoded defaults in place otherwise.
 func applyOverrides(cfg configColors) {
 	set := func(dst *color.Color, v string) {
 		if v != "" {
@@ -130,7 +117,7 @@ func applyOverrides(cfg configColors) {
 func init() {
 	cfg, err := loadConfig()
 	if err != nil {
-		// Don't crash the TUI over a bad config file — fall back to
+		// Don't crash the TUI over a bad config file fall back to
 		// defaults and let the user know via stderr.
 		os.Stderr.WriteString("gnmap: warning: failed to load " + configPath() + ": " + err.Error() + "\n")
 		return
