@@ -65,7 +65,7 @@ func (m appModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	}
 
 	// nmap has finished (or failed to start). Quit immediately rather than
-	// resuming the TUI, so the real terminal — with nmap's own output still
+	// resuming the TUI, so the real terminal with nmap's own output still
 	// on screen is what the user is left looking at.
 	if doneMsg, ok := msg.(nmapDoneMsg); ok {
 		m.runErr = doneMsg.err

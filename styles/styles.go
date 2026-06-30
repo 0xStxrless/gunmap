@@ -34,6 +34,9 @@ var (
 
 	sidebarBgActive = lipgloss.Color("#15151F")
 	sidebarRule     = lipgloss.Color("#00C8E8") // left accent bar on active page row
+
+	selectedGlyph = "✓"
+	cursorGlyph   = ">"
 )
 
 func Primary(s string) string {
@@ -299,9 +302,9 @@ func RenderOption(flag, description string, focused, selected bool, flagColWidth
 	indicatorChar := " "
 	switch {
 	case selected:
-		indicatorChar = "✓"
+		indicatorChar = selectedGlyph
 	case focused:
-		indicatorChar = "-"
+		indicatorChar = cursorGlyph
 	}
 	indicator := lipgloss.NewStyle().Foreground(indicatorFg).Background(rowBg).Render(indicatorChar)
 

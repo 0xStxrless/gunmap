@@ -4,6 +4,8 @@ go 1.26.1
 
 require charm.land/bubbletea/v2 v2.0.7
 
+require github.com/BurntSushi/toml v1.6.0 // indirect
+
 require (
 	charm.land/lipgloss/v2 v2.0.4
 	github.com/atotto/clipboard v0.1.4 // indirect
