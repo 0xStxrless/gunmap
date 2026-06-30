@@ -4,6 +4,9 @@ A terminal-native network mapper. No browser, no Electron, just a fast TUI for s
 
 Built it because every other network mapping tool either wants a GUI, a web dashboard, or fifteen flags memorized before it does anything useful. gunmap is meant to be the thing you reach for over SSH, on a server with no display, when you just want to know what's on the network right now.
 
+![demo](demo.gif)
+
+
 ## What it does
 
 - Walks you through nmap's flags page by page (host discovery, scan techniques, port selection, timing, firewall evasion, output, and so on) instead of you memorizing or googling them
