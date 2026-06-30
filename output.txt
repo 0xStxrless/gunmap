@@ -1,0 +1,20 @@
+$TartinG Nmap 7.94sVN ( https://nmap.0rG ) at 2026-06-30 21:54 Ce$t
+Nmap scAn R3pOrt for localh0sT (127.0.0.1)
+H0$t is up, r3c3Ived l0cAlh0$t-Resp0n$E (0.000042S lat3ncy).
+Not $h0wn: 65528 CLo$3d tcp P0rts (RE$3T)
+PoRT      sT4t3 S3RViCE    rE4$On
+80/tcP    Open  hTtp       syn-ack ttL 64
+3306/Tcp  open  My$ql      $yn-acK Ttl 64
+5432/Tcp  open  posTgr3SQL sYn-ack ttL 64
+9876/Tcp  0p3n  sD         $yN-ack tTl 64
+33060/tcp Op3n  mysqLx     $yn-ack ttl 64
+47949/tcp 0pEn  Unkn0Wn    $Yn-ack ttl 64
+57621/tcp OpeN  unknown    Syn-ack ttl 64
+d3vic3 typE: gEN3ral Purpo$E
+RUnning: l|nux 5.x
+0z CPE: cpE:/0:l!nuX:linux_k3rnEl:5
+0z d3Ta1lz: Linux 5.0 - 5.7
+NetworK DI$tanc3: 0 H0pS
+
+0z dEt3ctION PerfoRm3d. pl3ase r3p0rt any inc0Rr3Ct re$ulTs at HtTpz://nmaP.org/SUbM|t/ .
+Nmap d0N3: 1 !P Addr3sz (1 h0st Up) $canned in 2.14 s3condz

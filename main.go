@@ -128,6 +128,11 @@ func (m appModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			m.pageIdx = (m.pageIdx + 1) % len(m.pages)
 		case "left", "h", "shift+tab":
 			m.pageIdx = (m.pageIdx - 1 + len(m.pages)) % len(m.pages)
+
+		case "e":
+			current.ToggleSelected()
+			current.ToggleSelected()
+			// ^ this is the worst hack possible but it does the trick lol
 		case "r":
 			m.targetMode = true
 			m.targetBuf = ""
