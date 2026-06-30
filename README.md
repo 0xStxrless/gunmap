@@ -49,7 +49,7 @@ Move through the sidebar pages (host discovery, scan techniques, port selection,
 | `↑ / ↓`   | move between flags        |
 | `← / →`   | switch page                |
 | `space`   | toggle flag                |
-| `e`       | edit a flag's value   (not working yet)     |
+| `e`       | edit a flag's value    |
 | `r`       | run (prompts for target)   |
 | `q`       | quit                       |
 
